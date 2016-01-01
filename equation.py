@@ -14,10 +14,10 @@ def next(x):
     return x - function(x) / derivative(x)
 
 def get_start():
-    shift = 0   # starting from zero
-    step = 0.01 # adding this step
-    eps = step + 0.1 * step  # range will have size 2*eps
-    i = 0       # even parity flag
+    shift = 0                       # starting from zero
+    step = 0.01                     # adding this step
+    eps = step + 0.1 * step         # range will have size 2*eps
+    i = 0                           # even parity flag
     while function(shift - eps)*function(shift + eps) >= 0:
         shift = -shift
         if i % 2 == 0:
