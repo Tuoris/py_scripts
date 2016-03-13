@@ -6,8 +6,7 @@ from urllib import request
 def main():
     # You can get an access token following instructions on
     # https://developers.google.com/youtube/v3/getting-started
-    secret_key = "AIzaSyChB1p2qpkNp7Q9wkp_fV4ra-kFO8vVorY"
-    # secret_key = "YOUR_ACCESS_TOKEN"
+    secret_key = "YOUR_ACCESS_TOKEN"
     # Playlist that contains lectures collection of Programming Paradigms of Stanford University 
     playlist_id = "PL9D558D49CA734A02"
     
