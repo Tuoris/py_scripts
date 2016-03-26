@@ -24,17 +24,25 @@ def main():
             for item in video_data:
                 print("%10s | %7s | %5s" % item)
                 writer.writerow(item)
-    except urllib.error.URLError:
+    except urllib.error.URLError as e:
         import sys
-        print("Can't connect to www.youtube.com...")
-        print("Closing.")
+        print("Error ocured: %s" % e.reason)
+        print("Closing...")
         sys.exit()
 
 def process(rawResp):
-    """Return a dictionary recieced from response."""
-    data = rawResp.read().decode("utf-8")
+    """Return a dictionary recieved from response."""
+    # TODO handle gzip response  
+    data = rawResp.read()
+    data = data.decode(rawResp.headers.get_content_charset(), "ignore")
     data_dict = loads(data)
     return data_dict
+
+def send_request(url):
+    r = request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11", 
+        })
+    return urllib.request.urlopen(r) 
     
 def get_video_ids(playlistId, secret):
     """Return ids of all video from playlist."""
@@ -42,7 +50,7 @@ def get_video_ids(playlistId, secret):
     playlistAPICall = ("https://www.googleapis.com/youtube/v3/playlistItems?"
                        "part=contentDetails&playlistId={}&key={}&pageToken={}")
     
-    resp = request.urlopen(playlistAPICall.format(playlistId, secret, ""))    
+    resp = send_request(playlistAPICall.format(playlistId, secret, ""))
     data = process(resp)
     nextPageToken = data.get("nextPageToken", "")
     while nextPageToken:
@@ -50,22 +58,24 @@ def get_video_ids(playlistId, secret):
             all_video_ids.append(item["contentDetails"]["videoId"])
         
         nextPageToken = data.get("nextPageToken", "")
-        resp = request.urlopen(playlistAPICall.format(playlistId, secret, nextPageToken))
+        resp = send_request(playlistAPICall.format(playlistId, secret, nextPageToken))
         data = process(resp)
     
     return all_video_ids
 
 def get_info(videoId, secret):
     """Return tuple that contains video title, number of views and likes."""
+
     videoAPICall = ("https://www.googleapis.com/youtube/v3/videos?id={}&part=statistics,snippet&"
                    "fields=items%28id,snippet/title,statistics%28viewCount,likeCount%29%29&key={}")
-    resp = request.urlopen(videoAPICall.format(videoId, secret))
+    resp = send_request(videoAPICall.format(videoId, secret))
     
     data = process(resp)
     item = data["items"][0]
-    title = item["snippet"]["title"][8:10].strip()
-    viewCount = item["statistics"]["viewCount"]
-    likeCount = item["statistics"]["likeCount"]
+    title = item["snippet"]["title"]
+    
+    viewCount = item["statistics"].get("viewCount", 0)
+    likeCount = item["statistics"].get("likeCount", 0)
     
     return (title, viewCount, likeCount)
 
