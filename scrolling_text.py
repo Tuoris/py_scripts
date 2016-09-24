@@ -2,7 +2,7 @@ from sys import stdout, exit
 from time import sleep
 
 
-def walking_strip(text, repeats=1, space=0, delay=0.1):
+def scrolling_text(text, repeats=1, space=0, delay=0.1):
     data = text + ' ' * space
     l = len(data)
     cycles = l * repeats + 1
@@ -14,7 +14,7 @@ def walking_strip(text, repeats=1, space=0, delay=0.1):
 
 def main():
     print("Enter your string")
-    text = input(">>> ").strip()
+    text = input(">>> ").strip() + ' '
     print("Enter additional information or 'Enter' to use defaults")
     print("In format: number of repeats, additional space, delay in ms")
     add_info = input(">>> ").split()
@@ -26,10 +26,10 @@ def main():
         exit(0)
 
     if len(add_info) == 3:
-        walking_strip(text, int(add_info[0]),
-                      int(add_info[1]), int(add_info[2]) / 100)
+        scrolling_text(text, int(add_info[0]),
+                       int(add_info[1]), int(add_info[2]) / 100)
     else:
-        walking_strip(text)
+        scrolling_text(text)
     pass
 
 if __name__ == '__main__':
