@@ -36,52 +36,57 @@ def end_section():
 
 section_width = 40
 
-interval = (0, 3)
-a, b = interval
-h = 0.4
 
-fa = f(a)
-fb = f(b)
+def main():
+    interval = (0, 3)
+    a, b = interval
+    h = 0.4
 
-if abs(fb) > abs(fa) and fa * fb > 0:
-    h = -h
-b = a + h
-fb = f(b)
-
-# Looking for root at interval
-section(' Root localization ')
-while fa * fb > 0 and a >= interval[0] and b <= interval[1]:
-    print("a = {:.2f}, b = {:.2f}".format(a, b))
-    a = b
-    b = a + h
     fa = f(a)
     fb = f(b)
 
-if a >= interval[0] and b <= interval[1]:
-    print('Interval located : [{:.2f},{:.2f}]'.format(a, b))
-else:
-    print('Interval not located!')
-    print('Unable to find roots.\n')
-    exit()
-end_section()
+    if abs(fb) > abs(fa) and fa * fb > 0:
+        h = -h
+    b = a + h
+    fb = f(b)
 
-# Main calculations
-section(' Secant method ')
-x = a
-a, b, x, x_old = loop(a, b, x)
+    # Looking for root at interval
+    section(' Root localization ')
+    while fa * fb > 0 and a >= interval[0] and b <= interval[1]:
+        print("a = {:.2f}, b = {:.2f}".format(a, b))
+        a = b
+        b = a + h
+        fa = f(a)
+        fb = f(b)
 
-loops = 1
-while (calc_precision(x, x_old) * 100 > PRECISION or
-       loops >= MAX_LOOPS):
+    if a >= interval[0] and b <= interval[1]:
+        print('Interval located : [{:.2f},{:.2f}]'.format(a, b))
+    else:
+        print('Interval not located!')
+        print('Unable to find roots.\n')
+        exit()
+    end_section()
+
+    # Main calculations
+    section(' Secant method ')
+    x = a
     a, b, x, x_old = loop(a, b, x)
-    print('x = {:.8f}, x_old = {:.8f}'.format(x, x_old))
-    loops += 1
-end_section()
 
-# Result displaying
-section(' Result ')
-print('x = {:.8f}, f(x) = {:.8f}'.format(x, f(x)))
-print('Defined precision: {}%'.format(PRECISION))
-print('Current precision: {:%}'.format(calc_precision(x, x_old)))
-print('Loops: {}'.format(loops))
-end_section()
+    loops = 1
+    while (calc_precision(x, x_old) * 100 > PRECISION or
+           loops >= MAX_LOOPS):
+        a, b, x, x_old = loop(a, b, x)
+        print('x = {:.8f}, x_old = {:.8f}'.format(x, x_old))
+        loops += 1
+    end_section()
+
+    # Result displaying
+    section(' Result ')
+    print('x = {:.8f}, f(x) = {:.8f}'.format(x, f(x)))
+    print('Defined precision: {}%'.format(PRECISION))
+    print('Current precision: {:%}'.format(calc_precision(x, x_old)))
+    print('Loops: {}'.format(loops))
+    end_section()
+
+if __name__ == '__main__':
+    main()
