@@ -1,6 +1,9 @@
 # python
 Python scripts
 
+### spam_module
+An example of Python modules in C
+
 ### currency_converter.py
 Simple currency converter
 
