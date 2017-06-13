@@ -9,11 +9,5 @@ Get likes and views of all videos in youtube playlist and store it in csv file u
 ### currency_converter.py
 Simple currency converter
 
-### equation.py
+### linear_equation_solver.py
 Newton's method for finding roots of equation
-
-### scrolling_text.py
-Use sys.stdout for creating scrolling text effect
-
-### secant_method.py
-Secant method for finding roots of equation
